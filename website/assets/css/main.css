@@ -1270,6 +1270,17 @@ button {
 	z-index: 2;
 }
 
+/* Hide the overlay completely during Chill focus so the focused image is shown raw */
+body.chill-bg-fadeout #bg:before,
+body.chill-bg-focus #bg:before {
+	opacity: 0;
+	pointer-events: none;
+	-moz-transition: opacity 0.6s ease-in-out;
+	-webkit-transition: opacity 0.6s ease-in-out;
+	-ms-transition: opacity 0.6s ease-in-out;
+	transition: opacity 0.6s ease-in-out;
+}
+
 #bg:after {
 	-moz-transform: scale(1.125);
 	-webkit-transform: scale(1.125);
@@ -1297,8 +1308,57 @@ body.is-article-visible #bg:after {
 	filter: blur(0.2rem);
 }
 
+/* When entering Chill mode, hide the blurred pseudo-background so the focused image shows */
+/* Use a separate class for fading out the blurred pseudo-background so we can stagger the focus fade-in */
+body.chill-bg-fadeout #bg:after {
+	opacity: 0;
+	pointer-events: none;
+	-moz-transition: opacity 0.6s ease-in-out, -moz-transform 0.325s ease-in-out, -moz-filter 0.325s ease-in-out;
+	-webkit-transition: opacity 0.6s ease-in-out, -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out;
+	-ms-transition: opacity 0.6s ease-in-out, -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out;
+	transition: opacity 0.6s ease-in-out, transform 0.325s ease-in-out, filter 0.325s ease-in-out;
+}
+
+/* Neutralize zoom on the blurred bg during Chill so sizes match */
+body.chill-bg-fadeout #bg:after {
+	-moz-transform: scale(1) !important;
+	-webkit-transform: scale(1) !important;
+	-ms-transform: scale(1) !important;
+	transform: scale(1) !important;
+	transform-origin: center center !important;
+	-webkit-transform-origin: center center !important;
+	-ms-transform-origin: center center !important;
+	z-index: 0 !important;
+	-moz-transition: opacity 0.6s ease-in-out, -moz-transform 0.6s ease-in-out;
+	-webkit-transition: opacity 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
+	-ms-transition: opacity 0.6s ease-in-out, -ms-transform 0.6s ease-in-out;
+	transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+}
+
 body.is-preload #bg:before {
 	background-color: #000000;
+}
+
+/* Focused background used by Chill mode */
+#bg .bg-focus {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("../../images/bg_focus.jpg");
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	opacity: 0;
+	transition: opacity 0.6s ease-in-out;
+	z-index: 1;
+	/* sits above blurred bg:after but below overlay (:before has z-index:2) */
+	pointer-events: none;
+}
+
+body.chill-bg-focus #bg .bg-focus {
+	opacity: 1;
 }
 
 /* Wrapper */

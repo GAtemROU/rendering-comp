@@ -237,12 +237,31 @@ function initComparisons() {
 			$header.hide();
 			$footer.hide();
 
-			// Show main, article.
-			$main.show();
-			$article.show();
 
-			// Activate article.
-			$article.addClass('active');
+			// Special case for Chill section: focus on background only
+			if (id === 'chill') {
+				// Hide all content except #bg
+				$main.hide();
+				$header.hide();
+				$footer.hide();
+				$('#bg').show();
+				// Hide all children of body except #bg
+				$body.children().not('#bg').hide();
+				// Hide the chill article itself so no window appears
+				$article.hide();
+				// Ensure focused bg element exists and show it via class
+				var $bg = $('#bg');
+				if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
+				// Fade the blurred bg out first, then fade the focused image in
+				$body.addClass('chill-bg-fadeout');
+				setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
+			} else {
+				// Show main, article.
+				$main.show();
+				$article.show();
+				// Activate article.
+				$article.addClass('active');
+			}
 
 			// Unlock.
 			locked = false;
@@ -272,6 +291,31 @@ function initComparisons() {
 
 				// Hide current article.
 				$currentArticle.hide();
+
+				// Special-case: Chill should not display an article window.
+				if (id === 'chill') {
+					$main.hide();
+					$header.hide();
+					$footer.hide();
+					$('#bg').show();
+					$body.children().not('#bg').hide();
+					$article.hide();
+					var $bg = $('#bg');
+					if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
+					$body.addClass('chill-bg-fadeout');
+					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
+					// Window stuff.
+					$window
+						.scrollTop(0)
+						.triggerHandler('resize.flexbox-fix');
+
+					// Unlock.
+					setTimeout(function () {
+						locked = false;
+					}, delay);
+
+					return;
+				}
 
 				// Show article.
 				$article.show();
@@ -311,6 +355,31 @@ function initComparisons() {
 				$header.hide();
 				$footer.hide();
 
+				// Special-case: Chill should focus background only.
+				if (id === 'chill') {
+					$main.hide();
+					$header.hide();
+					$footer.hide();
+					$('#bg').show();
+					$body.children().not('#bg').hide();
+					$article.hide();
+					var $bg = $('#bg');
+					if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
+					$body.addClass('chill-bg-fadeout');
+					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
+					// Window stuff.
+					$window
+						.scrollTop(0)
+						.triggerHandler('resize.flexbox-fix');
+
+					// Unlock.
+					setTimeout(function () {
+						locked = false;
+					}, delay);
+
+					return;
+				}
+
 				// Show main, article.
 				$main.show();
 				$article.show();
@@ -342,6 +411,27 @@ function initComparisons() {
 
 		var $article = $main_articles.filter('.active');
 
+
+		// Restore everything if Chill was focused (stagger fade-out)
+		if ($body.hasClass('chill-bg-focus') || $body.hasClass('chill-bg-fadeout')) {
+			var $bg = $('#bg'), $focus = $bg.find('.bg-focus');
+			// remove focus first (fade out focused image)
+			$body.removeClass('chill-bg-focus');
+			if ($focus.length) {
+				// after focus fades out, remove fadeout class (restores blurred bg) and remove element
+				setTimeout(function () {
+					$body.removeClass('chill-bg-fadeout');
+					$focus.remove();
+					// Show all children except #bg
+					$body.children().not('#bg').show();
+					$('#bg').show();
+				}, 650);
+			} else {
+				$body.removeClass('chill-bg-fadeout');
+				$body.children().not('#bg').show();
+				$('#bg').show();
+			}
+		}
 		// Article not visible? Bail.
 		if (!$body.hasClass('is-article-visible'))
 			return;
