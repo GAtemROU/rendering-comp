@@ -254,11 +254,15 @@ function initComparisons() {
 				if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
 				// Fade the blurred bg out first, then fade the focused image in
 				$body.addClass('chill-bg-fadeout');
+				// show chill audio toggle
+				$('#chill-audio-toggle').show();
 				setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 			} else {
 				// Show main, article.
 				$main.show();
 				$article.show();
+				// hide chill audio toggle when not in Chill
+				$('#chill-audio-toggle').hide();
 				// Activate article.
 				$article.addClass('active');
 			}
@@ -303,6 +307,8 @@ function initComparisons() {
 					var $bg = $('#bg');
 					if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
 					$body.addClass('chill-bg-fadeout');
+					// show chill audio toggle
+					$('#chill-audio-toggle').show();
 					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 					// Window stuff.
 					$window
@@ -319,6 +325,8 @@ function initComparisons() {
 
 				// Show article.
 				$article.show();
+				// hide chill audio toggle when not in Chill
+				$('#chill-audio-toggle').hide();
 
 				// Activate article.
 				setTimeout(function () {
@@ -366,6 +374,8 @@ function initComparisons() {
 					var $bg = $('#bg');
 					if ($bg.find('.bg-focus').length === 0) $bg.append('<div class="bg-focus"></div>');
 					$body.addClass('chill-bg-fadeout');
+					// show chill audio toggle
+					$('#chill-audio-toggle').show();
 					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 					// Window stuff.
 					$window
@@ -383,6 +393,8 @@ function initComparisons() {
 				// Show main, article.
 				$main.show();
 				$article.show();
+				// hide chill audio toggle when not in Chill
+				$('#chill-audio-toggle').hide();
 
 				// Activate article.
 				setTimeout(function () {
@@ -412,26 +424,39 @@ function initComparisons() {
 		var $article = $main_articles.filter('.active');
 
 
-		// Restore everything if Chill was focused (stagger fade-out)
+		// Restore everything if Chill was focused (stagger fade-out with blur-on-top)
 		if ($body.hasClass('chill-bg-focus') || $body.hasClass('chill-bg-fadeout')) {
 			var $bg = $('#bg'), $focus = $bg.find('.bg-focus');
-			// remove focus first (fade out focused image)
+			// Pause chill audio if playing and hide the toggle
+			var $chillAudio = $('#chill-audio');
+			var $chillToggle = $('#chill-audio-toggle');
+			if ($chillAudio.length) {
+				try { $chillAudio[0].pause(); } catch (e) { }
+			}
+			if ($chillToggle.length) {
+				$chillToggle.removeClass('playing');
+				$chillToggle.hide();
+			}
+			// trigger the restore state: bring blurred bg on top and fade it in while focus fades out
 			$body.removeClass('chill-bg-focus');
+			$body.addClass('chill-restore');
 			if ($focus.length) {
-				// after focus fades out, remove fadeout class (restores blurred bg) and remove element
+				// after both fades complete, remove helper classes and element, then restore content
 				setTimeout(function () {
-					$body.removeClass('chill-bg-fadeout');
+					$body.removeClass('chill-bg-fadeout chill-restore');
 					$focus.remove();
 					// Show all children except #bg
 					$body.children().not('#bg').show();
 					$('#bg').show();
-				}, 650);
+				}, 700);
 			} else {
-				$body.removeClass('chill-bg-fadeout');
+				$body.removeClass('chill-bg-fadeout chill-restore');
 				$body.children().not('#bg').show();
 				$('#bg').show();
 			}
 		}
+
+
 		// Article not visible? Bail.
 		if (!$body.hasClass('is-article-visible'))
 			return;
@@ -536,8 +561,44 @@ function initComparisons() {
 
 	});
 
+	// Audio toggle handling for Chill mode (button inside #bg)
+	var $chillAudioEl = $('#chill-audio'),
+		$chillToggleBtn = $('#chill-audio-toggle');
+
+	$chillToggleBtn.on('click', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (!$chillAudioEl.length) return;
+		var audio = $chillAudioEl[0];
+		if (audio.paused) {
+			audio.play().catch(function () { });
+			$chillToggleBtn.addClass('playing');
+		} else {
+			audio.pause();
+			$chillToggleBtn.removeClass('playing');
+		}
+	});
+
+	// Chill exit/close button: stop audio and return to main
+	$('#chill-exit').on('click', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		// Pause audio if present
+		var ca = $('#chill-audio');
+		if (ca.length) {
+			try { ca[0].pause(); } catch (err) { }
+		}
+		$('#chill-audio-toggle').removeClass('playing');
+		// Hide chill / go back to main
+		$main._hide(true);
+	});
+
 	// Events.
 	$body.on('click', function (event) {
+
+		// If Chill background is active/in-transition, ignore clicks so Chill stays open.
+		if ($body.hasClass('chill-bg-focus') || $body.hasClass('chill-bg-fadeout') || $body.hasClass('chill-restore'))
+			return;
 
 		// Article visible? Hide.
 		if ($body.hasClass('is-article-visible'))
@@ -621,6 +682,8 @@ function initComparisons() {
 	// Hide main, articles.
 	$main.hide();
 	$main_articles.hide();
+	// Ensure chill audio toggle is hidden by default until Chill is entered
+	$('#chill-audio-toggle').hide();
 
 	// Initial article.
 	if (location.hash != ''

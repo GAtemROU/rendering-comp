@@ -39,7 +39,7 @@
 					<li><a href="#chill">Chill</a></li>
 					<li><a href="#stats">Statistics</a></li>
 					<li><a href="#credits">Credits</a></li>
-					<!-- <li><a href="#elements">Elements</a></li> -->
+					<li><a href="#elements">Elements</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -245,9 +245,9 @@
 			</article>
 
 			<!-- Chill Zone -->
-			   <article id="chill">
-				   <!-- Chill Zone: background focus only, content removed for immersive effect -->
-			   </article>
+			<article id="chill">
+				<!-- Chill Zone: background focus only, content removed for immersive effect -->
+			</article>
 
 			<!-- Statistics -->
 			<article id="stats">
@@ -563,7 +563,15 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 	</div>
 
 	<!-- BG -->
-	<div id="bg"></div>
+	<div id="bg">
+		<audio id="chill-audio" src="music/phonk1.mp3" loop preload="auto"></audio>
+		<button id="chill-audio-toggle" type="button" class="button primary icon solid fa-music">
+			<span class="label">Music</span>
+		</button>
+
+		<!-- Chill exit/close button (shows only in Chill state) -->
+		<button id="chill-exit" type="button" class="chill-close" aria-label="Exit Chill"></button>
+	</div>
 
 	<!-- Scripts -->
 	<script src="assets/js/jquery.min.js"></script>
