@@ -1,0 +1,588 @@
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	<title>Night Rider</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+</head>
+
+<body class="is-preload">
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<div class="logo">
+				<span class="icon fa-gem"></span>
+			</div>
+			<div class="content">
+				<div class="inner">
+					<h1>Night Rider</h1>
+				</div>
+			</div>
+			<nav>
+				<ul>
+					<li><a href="#intro">Intro</a></li>
+					<li><a href="#modeling">Modeling</a></li>
+					<li><a href="#features">Features</a></li>
+					<li><a href="#chill">Chill</a></li>
+					<li><a href="#stats">Statistics</a></li>
+					<li><a href="#credits">Credits</a></li>
+					<!-- <li><a href="#elements">Elements</a></li> -->
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<div id="main">
+			<!-- scene: parked supra in front of a building with neon lights, wet asphalt, highly reflective, some fog. -->
+
+			<!-- Intro -->
+			<article id="intro">
+				<h2 class="major">Intro</h2>
+				<span class="image main"><img src="images/final_render/final.jpg" alt="" /></span>
+				<p> The scene captures classic JDM aesthetics infused with a dark, underground mood and vivid neon
+					accents. A timeless Toyota Supra MKIV is parked before an abandoned-looking building glowing with
+					neon signage. The rain-soaked asphalt and drifting fog deepen the atmosphere, amplifying the
+					contrast between the sleek, modern car and the decaying downtown surroundings.</p>
+
+				<!-- <p> Check out the chill zone to experience the scene together with some fitting music. <a
+						href="#chill"></a></p> -->
+			</article>
+
+			<!-- Modeling -->
+			<article id="modeling">
+				<h2 class="major">Modeling</h2>
+				<span class="image main"><img src="images/modeling/blender_scene.png" alt="" /></span>
+				<p>The modeling of the scene has taken the same if not more time than the feature implementation part.
+					Every
+					object outlined on the above image has been modeled from scratch in Blender. The non-outlined
+					objects
+					are 3D assets taken from <a href="https://www.blenderkit.com/">BlenderKit</a>. See credits for more
+					information on particular assets.</p>
+				<h3>Car</h3>
+				<p>The car has been by far the most time consuming part to model. It has been modeled completely from
+					scratch by following the blueprint references and an amazing free <a
+						href="https://www.youtube.com/watch?v=VGPvxIrobFE&list=PLoGhuFDN7nEE-mz32Oy36fbebPWu1gEBi">series
+						of
+						tutorials</a> on car modeling.</p>
+				<p> The main focus has been to closely follow the blueprint references while modeling the main parts.
+					The smaller details has been modeled later and only in the visible areas. The smoothness of the
+					model is achieved by a subdivision surface
+					modifier. </p>
+				<span class="image main"><img src="images/modeling/supra_ref.png" alt="" /></span>
+				<p>Below are some screenshots for the intermediate steps of the car modeling process:</p>
+				<span class="image main"><img src="images/modeling/car1.png" alt="" /></span>
+				<span class="image main"><img src="images/modeling/car2.png" alt="" /></span>
+				<span class="image main"><img src="images/modeling/car3.png" alt="" /></span>
+				<span class="image main"><img src="images/modeling/car4.png" alt="" /></span>
+				<h3>Wet Asphalt</h3>
+				<p>Modeling the wet asphalt is a completely different challenge compared to the car. It involves
+					creating realistic material properties and textures to simulate wetness, roughness and reflectivity.
+					The material is highly inspired by the following <a
+						href="https://www.youtube.com/watch?v=5L74YpLyiFI">tutorial</a>.</p>
+
+				<p>By combining different roughness maps with normal maps that represent the surface details, a
+					realistic wet asphalt material is achieved.</p>
+
+				<p>Furthermore, as the texture is procedurally generated, one needs to bake it to a texture map to
+					export to Lightwave. The most challenging part turned out to bake the normal map correctly.
+					Although, this part was tricky to figure out, the normals have tremendously improved the realism
+					of the asphalt, more on that in the feature section.</p>
+				<h3>Old Versions</h3>
+				<p>To further appreciate the efforts put into the modeling process, here are some old versions of the
+					scene demonstrating the evolution of the design.</p>
+				<span class="image main"><img src="images/old_renders/progress1.jpg" alt="" /></span>
+				<span class="image main"><img src="images/old_renders/progress2.jpg" alt="" /></span>
+				<span class="image main"><img src="images/old_renders/progress3.jpeg" alt="" /></span>
+				<span class="image main"><img src="images/old_renders/progress4.jpeg" alt="" /></span>
+
+			</article>
+
+			<!-- Features -->
+			<article id="features">
+				<h2 class="major">Features</h2>
+				<p>This section covers the implemented features. And how the scene evolves with each added feature.</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/final.jpg">
+						<span class="img-label img-label-right">final</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/preview_none_2k.jpg">
+						<span class="img-label img-label-left">no features</span>
+					</div>
+				</div>
+				<h2>Rendering</h2>
+				<p>As there are number of features implemented, they are divided into two sections of rendering and
+					postprocessing. The first part does not include any postprocessing techniques, so enjoy the raw and
+					noisy render outputs. Also for the sake of simplicity, the volume is removed for such renders.</p>
+				<h3>Area Lights</h3>
+				<p>Adding area lights to the scene drastically improves the light spread throughout the scene, while
+					also
+					reducing the noise.</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/preview_lights.jpg">
+						<span class="img-label img-label-right">area lights</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/preview_none.jpg">
+						<span class="img-label img-label-left">emissive only</span>
+					</div>
+				</div>
+				<h3>Normal Mapping</h3>
+				<p>The normal map is a simple yet extremely effective feature to implement. Take a closer look at how
+					the
+					wet asphalt turns from a smooth mirror plane into a well-defined concrete material with water
+					puddles.</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/preview_lights_normal.jpg">
+						<span class="img-label img-label-right">with</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/preview_lights.jpg">
+						<span class="img-label img-label-left">without</span>
+					</div>
+				</div>
+				<h3>Clearcoat Material</h3>
+				<p>Taking into account that the main object of the scene is the car, a decent car material is very
+					important.
+					The implemented clearcoat is a simple, but good-looking material for the main parts of the vehicle.
+				</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/preview_all.jpg">
+						<span class="img-label img-label-right">clearcoat</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/preview_lights_normal.jpg">
+						<span class="img-label img-label-left">principled</span>
+					</div>
+				</div>
+				<h2>Volumetric</h2>
+				<p>The constant homogenous volume is not to be treated as an additional feature (as it was implemented
+					as part of the course). </p>
+				<p>However, for the sake
+					of completeness, see how the scene changes with the presence of the fog, adding a darker atmosphere.
+					The fog further highlights the area lights and neon signs, adding a better sense of
+					depth to the scene.
+				</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/noisy_color.jpg">
+						<span class="img-label img-label-right">fog</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/preview_all_2k.jpg">
+						<span class="img-label img-label-left">no fog</span>
+					</div>
+				</div>
+				<h2>Postprocessing</h2>
+				<p>Each postprocessing feature enormously boosts the quality of the final image. Let's look at them step
+					by step.</p>
+				<h3>Image Denoising</h3>
+				<p>Even after 1024 samples per pixel, the image remains noisy, mainly due to the constant volume present
+					throughout the scene, although the high amount of lights also contribute to this problem. </p>
+				<p>Hence, an <a href="https://www.openimagedenoise.org/">Open Image Denoise</a> filter is applied to
+					remove the leftover noise.
+				</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/denoised.jpg">
+						<span class="img-label img-label-right">denoised</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/noisy_color.jpg">
+						<span class="img-label img-label-left">noisy</span>
+					</div>
+				</div>
+				<h3>Bloom Effect</h3>
+				<p>In order to highlight the extremely bright objects such as neon signs and the car's rear lights, a
+					bloom effect is applied. It adds a glow around these bright areas, allowing the light to spill over
+					adjacent areas, enhancing the overall visual appeal.</p>
+				<p>A typical bloom effect was not enough for the current scene, as it would not spread the light far
+					enough, hence a downscaling technique was used to achieve the desired effect. This includes
+					downsampling the image to multiple lower resolutions (1/2, 1/4, 1/8) before applying the bloom, then
+					upsampling and blending it back to the original image.</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/bloomed.jpg">
+						<span class="img-label img-label-right">with</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/denoised.jpg">
+						<span class="img-label img-label-left">without</span>
+					</div>
+				</div>
+				<h3>ACES Tonemapping</h3>
+				<p>Finally, due to presence of very bright light sources, a proper tone mapping needs to be applied to
+					the
+					image to ensure that details are preserved and the overall brightness is balanced. The ACES filmic
+					tone mapping is a perfect fit to convert such high dynamic range images to a displayable format.</p>
+				<div class="img-comp-container">
+					<div class="img-comp-img">
+						<img src="images/final_render/final.jpg">
+						<span class="img-label img-label-right">with</span>
+					</div>
+					<div class="img-comp-img img-comp-overlay">
+						<img src="images/final_render/bloomed.jpg">
+						<span class="img-label img-label-left">without</span>
+					</div>
+				</div>
+			</article>
+
+			<!-- Chill Zone -->
+			<article id="chill">
+				<!-- Chill Zone: background focus only, content removed for immersive effect -->
+			</article>
+
+			<!-- Statistics -->
+			<article id="stats">
+				<h2 class="major">Statistics</h2>
+				<h3>Resolution</h3>
+				<p>2560 x 1440</p>
+				<h3>Render Time</h3>
+				<p>~ 12 hours</p>
+				<h3>Samples per Pixel</h3>
+				<p>1024</p>
+				<h3>Light Sources</h3>
+				<p>13 area lights<br>
+					14 emissive objects<br>
+				</p>
+				<h3>Hardware</h3>
+				<p>Intel Core i7-11800H
+					16 GB RAM
+				</p>
+				<h3>Primitives</h3>
+				<p>~ 400 k</p>
+			</article>
+
+			<!-- Credits -->
+			<article id="credits">
+				<h2 class="major">Credits</h2>
+				<h3>Acknowledgements</h3>
+				<p>Special thanks to the tutor team that have significantly contributed to the success of this project,
+					by pointing out mistakes and providing valuable advice. In particular to my tutor Ben Dierks. </p>
+				<h3>Blender Tutorials</h3>
+				<p><a href="https://www.youtube.com/watch?v=VGPvxIrobFE&list=PLoGhuFDN7nEE-mz32Oy36fbebPWu1gEBi">car
+						modeling</a><br>
+					<a href="https://www.youtube.com/watch?v=5L74YpLyiFI">wet asphalt</a>
+				</p>
+				<h3>Assets</h3>
+				<a href="https://www.blenderkit.com/asset-gallery-detail/e653d103-eab5-4666-9036-2c4bc8cc7464/">
+					far building</a><br>
+				<a href="https://www.blenderkit.com/asset-gallery-detail/d2f3f474-84c8-4e9e-8f88-5a3415e53c2b/">
+					near building</a><br>
+				<a href="https://www.blenderkit.com/asset-gallery-detail/7f8a772f-7aed-4004-85e4-5400956eedef/">
+					bus stop</a><br>
+				<a href="https://www.blenderkit.com/asset-gallery-detail/b25a950b-3f52-411c-8a8e-63940afa91f7/">
+					sidewalk</a><br>
+				<a
+					href="https://www.blenderkit.com/asset-gallery-detail/a83dd9aa-7de1-4952-b3b2-2b4b88a2af41/?query=category_subtree:wall-light+order:-bookmarks">
+					neon light</a>
+				<a
+					href="https://www.blenderkit.com/asset-gallery-detail/d40a8d8b-b545-4f6a-8f1c-ea24bc0720b7/?query=category_subtree:hdr-nature+order:-bookmarks">
+					cloudy hdri</a>
+				<a href="https://polyhaven.com/a/rooftop_night"> rooftop night hdri</a>
+				</p>
+				<h3>music</h3>
+				<p><a href="https://pixabay.com/music/">music platform</a></p>
+				<h3>Website</h3>
+				<p>Design: <a href="https://html5up.net">HTML5 UP</a><br>
+					Template: Dimension
+			</article>
+
+			<!-- Elements -->
+			<article id="elements">
+				<h2 class="major">Elements</h2>
+
+				<section>
+					<h3 class="major">Text</h3>
+					<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is
+						<em>emphasized</em>.
+						This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+						This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a
+							href="#">this is a link</a>.
+					</p>
+					<hr />
+					<h2>Heading Level 2</h2>
+					<h3>Heading Level 3</h3>
+					<h4>Heading Level 4</h4>
+					<h5>Heading Level 5</h5>
+					<h6>Heading Level 6</h6>
+					<hr />
+					<h4>Blockquote</h4>
+					<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus
+						euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis
+						iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem
+						ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+					<h4>Preformatted</h4>
+					<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
+				</section>
+
+				<section>
+					<h3 class="major">Lists</h3>
+
+					<h4>Unordered</h4>
+					<ul>
+						<li>Dolor pulvinar etiam.</li>
+						<li>Sagittis adipiscing.</li>
+						<li>Felis enim feugiat.</li>
+					</ul>
+
+					<h4>Alternate</h4>
+					<ul class="alt">
+						<li>Dolor pulvinar etiam.</li>
+						<li>Sagittis adipiscing.</li>
+						<li>Felis enim feugiat.</li>
+					</ul>
+
+					<h4>Ordered</h4>
+					<ol>
+						<li>Dolor pulvinar etiam.</li>
+						<li>Etiam vel felis viverra.</li>
+						<li>Felis enim feugiat.</li>
+						<li>Dolor pulvinar etiam.</li>
+						<li>Etiam vel felis lorem.</li>
+						<li>Felis enim et feugiat.</li>
+					</ol>
+					<h4>Icons</h4>
+					<ul class="icons">
+						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+					</ul>
+
+					<h4>Actions</h4>
+					<ul class="actions">
+						<li><a href="#" class="button primary">Default</a></li>
+						<li><a href="#" class="button">Default</a></li>
+					</ul>
+					<ul class="actions stacked">
+						<li><a href="#" class="button primary">Default</a></li>
+						<li><a href="#" class="button">Default</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="major">Table</h3>
+					<h4>Default</h4>
+					<div class="table-wrapper">
+						<table>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Item One</td>
+									<td>Ante turpis integer aliquet porttitor.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>Item Two</td>
+									<td>Vis ac commodo adipiscing arcu aliquet.</td>
+									<td>19.99</td>
+								</tr>
+								<tr>
+									<td>Item Three</td>
+									<td> Morbi faucibus arcu accumsan lorem.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>Item Four</td>
+									<td>Vitae integer tempus condimentum.</td>
+									<td>19.99</td>
+								</tr>
+								<tr>
+									<td>Item Five</td>
+									<td>Ante turpis integer aliquet porttitor.</td>
+									<td>29.99</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="2"></td>
+									<td>100.00</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+
+					<h4>Alternate</h4>
+					<div class="table-wrapper">
+						<table class="alt">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Item One</td>
+									<td>Ante turpis integer aliquet porttitor.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>Item Two</td>
+									<td>Vis ac commodo adipiscing arcu aliquet.</td>
+									<td>19.99</td>
+								</tr>
+								<tr>
+									<td>Item Three</td>
+									<td> Morbi faucibus arcu accumsan lorem.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>Item Four</td>
+									<td>Vitae integer tempus condimentum.</td>
+									<td>19.99</td>
+								</tr>
+								<tr>
+									<td>Item Five</td>
+									<td>Ante turpis integer aliquet porttitor.</td>
+									<td>29.99</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="2"></td>
+									<td>100.00</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="major">Buttons</h3>
+					<ul class="actions">
+						<li><a href="#" class="button primary">Primary</a></li>
+						<li><a href="#" class="button">Default</a></li>
+					</ul>
+					<ul class="actions">
+						<li><a href="#" class="button">Default</a></li>
+						<li><a href="#" class="button small">Small</a></li>
+					</ul>
+					<ul class="actions">
+						<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+						<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+					</ul>
+					<ul class="actions">
+						<li><span class="button primary disabled">Disabled</span></li>
+						<li><span class="button disabled">Disabled</span></li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="major">Form</h3>
+					<form method="post" action="#">
+						<div class="fields">
+							<div class="field half">
+								<label for="demo-name">Name</label>
+								<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+							</div>
+							<div class="field half">
+								<label for="demo-email">Email</label>
+								<input type="email" name="demo-email" id="demo-email" value=""
+									placeholder="jane@untitled.tld" />
+							</div>
+							<div class="field">
+								<label for="demo-category">Category</label>
+								<select name="demo-category" id="demo-category">
+									<option value="">-</option>
+									<option value="1">Manufacturing</option>
+									<option value="1">Shipping</option>
+									<option value="1">Administration</option>
+									<option value="1">Human Resources</option>
+								</select>
+							</div>
+							<div class="field half">
+								<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+								<label for="demo-priority-low">Low</label>
+							</div>
+							<div class="field half">
+								<input type="radio" id="demo-priority-high" name="demo-priority">
+								<label for="demo-priority-high">High</label>
+							</div>
+							<div class="field half">
+								<input type="checkbox" id="demo-copy" name="demo-copy">
+								<label for="demo-copy">Email me a copy</label>
+							</div>
+							<div class="field half">
+								<input type="checkbox" id="demo-human" name="demo-human" checked>
+								<label for="demo-human">Not a robot</label>
+							</div>
+							<div class="field">
+								<label for="demo-message">Message</label>
+								<textarea name="demo-message" id="demo-message" placeholder="Enter your message"
+									rows="6"></textarea>
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="Send Message" class="primary" /></li>
+							<li><input type="reset" value="Reset" /></li>
+						</ul>
+					</form>
+				</section>
+
+			</article>
+
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<p class="copyright">&copy; Tymur Mykhalievskyi 2026 | Design: <a href="https://html5up.net">HTML5 UP</a>.
+			</p>
+		</footer>
+
+	</div>
+
+	<!-- BG -->
+	<div id="bg">
+		<audio id="chill-audio" src="music/phonk1.mp3" loop preload="auto"></audio>
+		<button id="chill-audio-toggle" type="button" class="button primary icon solid fa-music">
+			<span class="label">Music</span>
+		</button>
+
+		<!-- Chill exit/close button (shows only in Chill state) -->
+		<button id="chill-exit" type="button" class="chill-close" aria-label="Exit Chill"></button>
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
