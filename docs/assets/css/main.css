@@ -1428,7 +1428,6 @@ body.chill-bg-focus #chill-audio-toggle {
 /* Ensure the next button uses the same square layout as the music toggle */
 #chill-next-track {
 	padding: 0 !important;
-	display: inline-flex !important;
 	align-items: center;
 	justify-content: center;
 }
