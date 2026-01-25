@@ -1379,9 +1379,10 @@ body.chill-bg-focus #bg .bg-focus {
 /* Chill audio toggle button (placed inside #bg) */
 #chill-audio-toggle {
 	position: fixed;
-	right: 2rem;
+	/* place to the left of the Next button so Next appears on the right */
+	right: calc(2rem + 3.25rem);
 	bottom: 2rem;
-	z-index: 5;
+	z-index: 10;
 	display: none;
 	opacity: 0.95;
 	/* make it a square, center its contents */
@@ -1394,10 +1395,9 @@ body.chill-bg-focus #bg .bg-focus {
 	box-sizing: border-box;
 }
 
-/* Show toggle when in any Chill state */
+/* Show toggle when in Chill (do NOT show during restore) */
 body.chill-bg-fadeout #chill-audio-toggle,
-body.chill-bg-focus #chill-audio-toggle,
-body.chill-restore #chill-audio-toggle {
+body.chill-bg-focus #chill-audio-toggle {
 	display: inline-block;
 }
 
@@ -1416,6 +1416,21 @@ body.chill-restore #chill-audio-toggle {
 #chill-audio-toggle.icon:before {
 	margin-right: 0 !important;
 	line-height: 1;
+}
+
+/* Make the next-track icon centered and remove extra spacing so the button stays square */
+#chill-next-track:before,
+#chill-next-track.icon:before {
+	margin-right: 0 !important;
+	line-height: 1;
+}
+
+/* Ensure the next button uses the same square layout as the music toggle */
+#chill-next-track {
+	padding: 0 !important;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
 }
 
 /* Chill exit (top-right) button styling — reuse article close cross */
@@ -2075,4 +2090,27 @@ body.is-preload #footer {
 		font-size: 0.75rem;
 		padding: 0.12rem 0.4rem;
 	}
+}
+
+/* Next-track button: same visual style as the music toggle, placed to the left of it */
+/* Next-track sits to the right of the music toggle (so it's the rightmost button) */
+#chill-next-track {
+	position: fixed;
+	right: 2rem;
+	bottom: 2rem;
+	z-index: 10;
+	display: none;
+	opacity: 0.95;
+	width: 2.75rem;
+	height: 2.75rem;
+	padding: 0;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+/* Show next button only while Chill is active (hide during restore/exit) */
+body.chill-bg-fadeout #chill-next-track,
+body.chill-bg-focus #chill-next-track {
+	display: inline-flex;
 }

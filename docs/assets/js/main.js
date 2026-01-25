@@ -256,6 +256,10 @@ function initComparisons() {
 				$body.addClass('chill-bg-fadeout');
 				// show chill audio toggle
 				$('#chill-audio-toggle').show();
+				// show next-track button as well (only in Chill)
+				$('#chill-next-track').show();
+				// Shuffle/reset chill playlist when entering Chill
+				try { var _ca = $('#chill-audio'); if (_ca.length && _ca[0].resetChill) _ca[0].resetChill(); } catch (e) { }
 				setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 			} else {
 				// Show main, article.
@@ -263,6 +267,7 @@ function initComparisons() {
 				$article.show();
 				// hide chill audio toggle when not in Chill
 				$('#chill-audio-toggle').hide();
+				$('#chill-next-track').hide();
 				// Activate article.
 				$article.addClass('active');
 			}
@@ -309,6 +314,10 @@ function initComparisons() {
 					$body.addClass('chill-bg-fadeout');
 					// show chill audio toggle
 					$('#chill-audio-toggle').show();
+					// show next-track button as well (only in Chill)
+					$('#chill-next-track').show();
+					// Shuffle/reset chill playlist when entering Chill
+					try { var _ca = $('#chill-audio'); if (_ca.length && _ca[0].resetChill) _ca[0].resetChill(); } catch (e) { }
 					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 					// Window stuff.
 					$window
@@ -327,6 +336,7 @@ function initComparisons() {
 				$article.show();
 				// hide chill audio toggle when not in Chill
 				$('#chill-audio-toggle').hide();
+				$('#chill-next-track').hide();
 
 				// Activate article.
 				setTimeout(function () {
@@ -376,6 +386,10 @@ function initComparisons() {
 					$body.addClass('chill-bg-fadeout');
 					// show chill audio toggle
 					$('#chill-audio-toggle').show();
+					// show next-track button as well (only in Chill)
+					$('#chill-next-track').show();
+					// Shuffle/reset chill playlist when entering Chill
+					try { var _ca = $('#chill-audio'); if (_ca.length && _ca[0].resetChill) _ca[0].resetChill(); } catch (e) { }
 					setTimeout(function () { $body.addClass('chill-bg-focus'); }, 200);
 					// Window stuff.
 					$window
@@ -395,6 +409,7 @@ function initComparisons() {
 				$article.show();
 				// hide chill audio toggle when not in Chill
 				$('#chill-audio-toggle').hide();
+				$('#chill-next-track').hide();
 
 				// Activate article.
 				setTimeout(function () {
@@ -423,6 +438,9 @@ function initComparisons() {
 
 		var $article = $main_articles.filter('.active');
 
+		// Ensure next-track button is hidden immediately on any hide/exit
+		try { $('#chill-next-track').hide(); } catch (e) { }
+
 
 		// Restore everything if Chill was focused (stagger fade-out with blur-on-top)
 		if ($body.hasClass('chill-bg-focus') || $body.hasClass('chill-bg-fadeout')) {
@@ -436,6 +454,9 @@ function initComparisons() {
 			if ($chillToggle.length) {
 				$chillToggle.removeClass('playing');
 				$chillToggle.hide();
+				// hide next-track immediately as well
+				var $chillNext = $('#chill-next-track');
+				if ($chillNext.length) $chillNext.hide();
 			}
 			// trigger the restore state: bring blurred bg on top and fade it in while focus fades out
 			$body.removeClass('chill-bg-focus');
@@ -565,6 +586,57 @@ function initComparisons() {
 	var $chillAudioEl = $('#chill-audio'),
 		$chillToggleBtn = $('#chill-audio-toggle');
 
+	// Chill playlist (add phonk2, phonk3, phonk4). When Chill is entered we shuffle
+	// the playback order. After the last track finishes we wrap back to the first
+	// in the shuffled order so playback cycles through the shuffled list.
+	(function setupChillPlaylist() {
+		var tracks = [
+			'music/phonk1.mp3',
+			'music/phonk2.mp3',
+			'music/phonk3.mp3',
+			'music/phonk4.mp3'
+		];
+
+		function shuffleArray(a) {
+			for (var i = a.length - 1; i > 0; i--) {
+				var j = Math.floor(Math.random() * (i + 1));
+				var t = a[i]; a[i] = a[j]; a[j] = t;
+			}
+		}
+
+		if ($chillAudioEl.length) {
+			var audio = $chillAudioEl[0];
+			// Ensure we don't loop single file; we'll manage sequence ourselves
+			try { audio.loop = false; } catch (e) { }
+
+			// attach playlist data and methods
+			audio._chillTracks = tracks;
+			audio._chillOrder = [];
+			audio._chillIndex = 0;
+
+			audio.resetChill = function () {
+				audio._chillOrder = tracks.map(function (_, i) { return i; });
+				shuffleArray(audio._chillOrder);
+				audio._chillIndex = 0;
+				audio.src = tracks[audio._chillOrder[audio._chillIndex]];
+			};
+
+			audio.playNextChill = function () {
+				audio._chillIndex = (audio._chillIndex + 1) % audio._chillOrder.length;
+				audio.src = tracks[audio._chillOrder[audio._chillIndex]];
+				audio.play().catch(function () { });
+			};
+
+			// When a track ends, go to next (wraps automatically via modulo above)
+			audio.addEventListener('ended', function () {
+				try { audio.playNextChill(); } catch (e) { }
+			});
+
+			// Initialize order once so the user can toggle play immediately
+			try { audio.resetChill(); } catch (e) { }
+		}
+	})();
+
 	$chillToggleBtn.on('click', function (e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -577,6 +649,25 @@ function initComparisons() {
 			audio.pause();
 			$chillToggleBtn.removeClass('playing');
 		}
+	});
+
+	// Next-track button: skip to the next track in the chill queue and start playback
+	var $chillNextBtn = $('#chill-next-track');
+	$chillNextBtn.on('click', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (!$chillAudioEl.length) return;
+		var audio = $chillAudioEl[0];
+		try {
+			if (audio.playNextChill) {
+				audio.playNextChill();
+				$chillToggleBtn.addClass('playing');
+			} else {
+				// fallback: just play (no playlist available)
+				audio.play().catch(function () { });
+				$chillToggleBtn.addClass('playing');
+			}
+		} catch (err) { }
 	});
 
 	// Chill exit/close button: stop audio and return to main
@@ -682,8 +773,9 @@ function initComparisons() {
 	// Hide main, articles.
 	$main.hide();
 	$main_articles.hide();
-	// Ensure chill audio toggle is hidden by default until Chill is entered
+	// Ensure chill audio toggle and next button are hidden by default until Chill is entered
 	$('#chill-audio-toggle').hide();
+	$('#chill-next-track').hide();
 
 	// Initial article.
 	if (location.hash != ''
