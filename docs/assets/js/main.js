@@ -642,15 +642,14 @@ function initComparisons() {
 	var $chillAudioEl = $('#chill-audio'),
 		$chillToggleBtn = $('#chill-audio-toggle');
 
-	// Chill playlist (add phonk2, phonk3, phonk4). When Chill is entered we shuffle
+	// Chill playlist. When Chill is entered we shuffle
 	// the playback order. After the last track finishes we wrap back to the first
 	// in the shuffled order so playback cycles through the shuffled list.
 	(function setupChillPlaylist() {
 		var tracks = [
 			'music/phonk1.mp3',
 			'music/phonk2.mp3',
-			'music/phonk3.mp3',
-			'music/phonk4.mp3'
+			'music/phonk3.mp3'
 		];
 
 		function shuffleArray(a) {
