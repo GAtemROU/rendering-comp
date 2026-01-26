@@ -35,10 +35,10 @@
 			</div>
 			<nav>
 				<ul>
-					<li><a href="#intro">Intro</a></li>
+					<li><a href="#chill">Exhibit</a></li>
+					<li><a href="#intro">Abstract</a></li>
 					<li><a href="#modeling">Modeling</a></li>
 					<li><a href="#features">Features</a></li>
-					<li><a href="#chill">Exhibit</a></li>
 					<li><a href="#stats">Statistics</a></li>
 					<li><a href="#credits">Credits</a></li>
 					<!-- <li><a href="#elements">Elements</a></li> -->
@@ -133,7 +133,13 @@
 				<h3>Area Lights</h3>
 				<p>Adding area lights to the scene drastically improves the light spread throughout the scene, while
 					also
-					reducing the noise.</p>
+					reducing the noise. The area lights have a completely different logic during path tracing comparing
+					to the emissive objects. While emissive objects are just randomly hit by rays, area lights are
+					sampled directly during every bounce.<br>
+					See the implementation in <code>src/lights/areaLight.cpp</code> as well as the sampling of main
+					shapes under
+					<code>src/shapes/.</code>
+				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
 						<img src="images/final_render/preview_lights.jpg">
@@ -145,10 +151,16 @@
 					</div>
 				</div>
 				<h3>Normal Mapping</h3>
-				<p>The normal map is a simple yet extremely effective feature to implement. Take a closer look at how
-					the
-					wet asphalt turns from a smooth mirror plane into a well-defined concrete material with water
-					puddles.</p>
+				<p>The normal map is a simple yet extremely effective feature to implement. It allows to use custom
+					shading normals to mimic the surface details without adding extra geometry. The main difficulty
+					encountered with this feature was not related to the implementation itself, but rather to baking the
+					normal map correctly.<br>
+					See the implementation in
+					<code>src/core/instance.cpp</code>
+				</p>
+				<p>Take a closer look at how the wet asphalt turns from a smooth mirror plane into a well-defined
+					concrete material with water puddles.
+				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
 						<img src="images/final_render/preview_lights_normal.jpg">
@@ -161,17 +173,19 @@
 				</div>
 				<h3>Clearcoat Material</h3>
 				<p>Taking into account that the main object of the scene is the car, a decent car material is very
-					important.
-					The implemented clearcoat is a simple, but good-looking material for the main parts of the vehicle.
+					important. The implemented clearcoat material combines properties of a diffuse and a smooth
+					dielectric materials making it a simple yet effective car paint model. The main difficulty was to
+					get the right balance between the color and reflectivity.<br>
+					See the implementation in <code>src/bsdfs/clearcoat.cpp</code>
 				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
 						<img src="images/final_render/preview_all.jpg">
-						<span class="img-label img-label-right">clearcoat</span>
+						<span class="img-label img-label-right">with</span>
 					</div>
 					<div class="img-comp-img img-comp-overlay">
 						<img src="images/final_render/preview_lights_normal.jpg">
-						<span class="img-label img-label-left">principled</span>
+						<span class="img-label img-label-left">without</span>
 					</div>
 				</div>
 				<h2>Volumetric</h2>
@@ -197,9 +211,11 @@
 					by step.</p>
 				<h3>Image Denoising</h3>
 				<p>Even after 1024 samples per pixel, the image remains noisy, mainly due to the constant volume present
-					throughout the scene, although the high amount of lights also contribute to this problem. </p>
-				<p>Hence, an <a href="https://www.openimagedenoise.org/">Open Image Denoise</a> filter is applied to
-					remove the leftover noise.
+					throughout the scene, although the high amount of lights also contribute to this problem. Hence, an
+					<a href="https://www.openimagedenoise.org/">Open Image Denoise</a> filter is applied to
+					remove the leftover noise. The hardest part was to correctly wire the pipeline to produce the
+					denoised image after rendering.<br>
+					See the implementation in <code>src/postprocesses/denoise.cpp</code>
 				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
@@ -217,8 +233,10 @@
 					adjacent areas, enhancing the overall visual appeal.</p>
 				<p>A typical bloom effect was not enough for the current scene, as it would not spread the light far
 					enough, hence a downscaling technique was used to achieve the desired effect. This includes
-					downsampling the image to multiple lower resolutions (1/2, 1/4, 1/8) before applying the bloom, then
-					upsampling and blending it back to the original image.</p>
+					scaling down the image to multiple lower resolutions (1/2, 1/4, 1/8) before applying the bloom, then
+					upscaling and blending it back to the original image.<br>
+					See the implementation in <code>src/postprocesses/bloom.cpp</code>
+				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
 						<img src="images/final_render/bloomed.jpg">
@@ -233,7 +251,9 @@
 				<p>Finally, due to presence of very bright light sources, a proper tone mapping is essential to ensure
 					that details are preserved and the overall brightness is balanced. The ACES filmic
 					tone mapping is a perfect fit to convert such high dynamic range images to a displayable format,
-					while improving the contrasts between the different elements in the scene.</p>
+					while improving the contrasts between the different elements in the scene.<br>
+					See the implementation in <code>src/postprocesses/tonemap.cpp</code>
+				</p>
 				<div class="img-comp-container">
 					<div class="img-comp-img">
 						<img src="render.jpg">
@@ -257,7 +277,7 @@
 				<h3>Resolution</h3>
 				<p>2560 x 1440</p>
 				<h3>Render Time</h3>
-				<p>~ 12 hours</p>
+				<p>~ 11 hours</p>
 				<h3>Samples per Pixel</h3>
 				<p>1024</p>
 				<h3>Light Sources</h3>
@@ -285,27 +305,31 @@
 					<a href="https://www.youtube.com/watch?v=5L74YpLyiFI">wet asphalt</a>
 				</p>
 				<h3>Assets</h3>
-				<a href="https://www.blenderkit.com/asset-gallery-detail/e653d103-eab5-4666-9036-2c4bc8cc7464/">
-					far building</a><br>
-				<a href="https://www.blenderkit.com/asset-gallery-detail/d2f3f474-84c8-4e9e-8f88-5a3415e53c2b/">
-					near building</a><br>
-				<a href="https://www.blenderkit.com/asset-gallery-detail/7f8a772f-7aed-4004-85e4-5400956eedef/">
-					bus stop</a><br>
-				<a href="https://www.blenderkit.com/asset-gallery-detail/b25a950b-3f52-411c-8a8e-63940afa91f7/">
-					sidewalk</a><br>
-				<a
-					href="https://www.blenderkit.com/asset-gallery-detail/a83dd9aa-7de1-4952-b3b2-2b4b88a2af41/?query=category_subtree:wall-light+order:-bookmarks">
-					neon light</a><br>
-				<a
-					href="https://www.blenderkit.com/asset-gallery-detail/d40a8d8b-b545-4f6a-8f1c-ea24bc0720b7/?query=category_subtree:hdr-nature+order:-bookmarks">
-					cloudy hdri</a><br>
-				<a href="https://polyhaven.com/a/rooftop_night"> rooftop night hdri</a>
+				<p><a href="https://www.blenderkit.com/asset-gallery-detail/e653d103-eab5-4666-9036-2c4bc8cc7464/">
+						far building</a><br>
+					<a href="https://www.blenderkit.com/asset-gallery-detail/d2f3f474-84c8-4e9e-8f88-5a3415e53c2b/">
+						near building</a><br>
+					<a href="https://www.blenderkit.com/asset-gallery-detail/7f8a772f-7aed-4004-85e4-5400956eedef/">
+						bus stop</a><br>
+					<a href="https://www.blenderkit.com/asset-gallery-detail/b25a950b-3f52-411c-8a8e-63940afa91f7/">
+						sidewalk</a><br>
+					<a
+						href="https://www.blenderkit.com/asset-gallery-detail/a83dd9aa-7de1-4952-b3b2-2b4b88a2af41/?query=category_subtree:wall-light+order:-bookmarks">
+						neon light</a><br>
+					<a
+						href="https://www.blenderkit.com/asset-gallery-detail/d40a8d8b-b545-4f6a-8f1c-ea24bc0720b7/?query=category_subtree:hdr-nature+order:-bookmarks">
+						cloudy hdri</a><br>
+					<a href="https://polyhaven.com/a/rooftop_night"> rooftop night hdri</a>
 				</p>
 				<h3>music</h3>
 				<p><a href="https://pixabay.com/music/">music platform</a></p>
 				<h3>Website</h3>
 				<p>Design: <a href="https://html5up.net">HTML5 UP</a><br>
 					Template: Dimension
+				</p>
+				<h3>Other</h3>
+				<p><a href="https://cseweb.ucsd.edu/~tzli/cse272/wi2023/homework1.pdf"> clearcoat</a></p>
+
 			</article>
 
 			<!-- Elements -->

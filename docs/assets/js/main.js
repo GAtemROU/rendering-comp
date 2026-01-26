@@ -14,13 +14,15 @@ function initComparisons() {
 		compareImages(x[i]);
 	}
 	function compareImages(img) {
-		var slider, clicked = 0, w, h;
+		var slider, clicked = 0, w, h, percent = 0.5;
 		var overlay = img; // overlay element (the one with class img-comp-overlay)
 		var container = overlay.parentElement;
 
 		/* Get the width and height of the container element */
 		w = container.offsetWidth;
 		h = container.offsetHeight;
+		/* Start at center (50%) unless percent was changed by user) */
+		percent = (typeof percent === 'number' && percent >= 0 && percent <= 1) ? percent : 0.5;
 
 		/* Ensure overlay covers the container and will be clipped rather than resized */
 		overlay.style.position = 'absolute';
@@ -30,18 +32,70 @@ function initComparisons() {
 		overlay.style.height = '100%';
 		overlay.style.overflow = 'hidden';
 
-		/* Initial clip: hide the right half */
-		overlay.style.clipPath = 'inset(0 ' + (w / 2) + 'px 0 0)';
-		overlay.style.webkitClipPath = 'inset(0 ' + (w / 2) + 'px 0 0)';
+		/* Initial clip: hide the right side based on percent */
+		var initX = Math.round(percent * w);
+		overlay.style.clipPath = 'inset(0 ' + (Math.max(0, w - initX)) + 'px 0 0)';
+		overlay.style.webkitClipPath = 'inset(0 ' + (Math.max(0, w - initX)) + 'px 0 0)';
 
 		/* Create slider: */
 		slider = document.createElement("DIV");
 		slider.setAttribute("class", "img-comp-slider");
 		/* Insert slider */
 		container.insertBefore(slider, overlay);
-		/* Position the slider in the middle: */
+		/* Position the slider according to percent: */
 		slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
-		slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
+		slider.style.left = (initX - (slider.offsetWidth / 2)) + "px";
+
+		/* Recalculate sizes & positions on window resize to keep slider in sync */
+		var _resizeTimer = null;
+		function doResize() {
+			// update container dimensions
+			w = container.offsetWidth;
+			h = container.offsetHeight;
+			// clamp percent
+			if (isNaN(percent) || percent < 0) percent = 0;
+			if (percent > 1) percent = 1;
+			var x = Math.round(percent * (w || 0));
+			// update overlay clip and slider position
+			var rightInset = Math.max(0, w - x);
+			overlay.style.clipPath = 'inset(0 ' + rightInset + 'px 0 0)';
+			overlay.style.webkitClipPath = 'inset(0 ' + rightInset + 'px 0 0)';
+			slider.style.left = (x - (slider.offsetWidth / 2)) + "px";
+			slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
+		}
+		function handleResize() {
+			// debounce to avoid layout thrashing
+			if (_resizeTimer) clearTimeout(_resizeTimer);
+			_resizeTimer = setTimeout(function () {
+				_resizeTimer = null;
+				doResize();
+			}, 40);
+		}
+		window.addEventListener('resize', handleResize);
+
+		// If available, observe size changes of the container (covers show/hide and responsive changes)
+		var _ro = null;
+		if (typeof ResizeObserver !== 'undefined') {
+			try {
+				_ro = new ResizeObserver(function () { handleResize(); });
+				_ro.observe(container);
+			} catch (e) { _ro = null; }
+		}
+
+		// Also watch for body class changes (the app toggles visibility by changing body classes)
+		var _mo = null;
+		if (typeof MutationObserver !== 'undefined') {
+			_mo = new MutationObserver(function (mutations) {
+				mutations.forEach(function (m) {
+					if (m.attributeName === 'class') {
+						// If container has a width now, resize immediately; otherwise debounce
+						if (container.offsetWidth > 0) handleResize();
+						else setTimeout(handleResize, 80);
+					}
+				});
+			});
+			_mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+		}
 
 		/* Create or update container-level corner labels and populate from data attributes.
 		   These labels follow which image is visible at each corner and are updated during slide(). */
@@ -134,6 +188,8 @@ function initComparisons() {
 		}
 
 		function slide(x) {
+			/* Keep percent (ratio) so we can update on resize */
+			percent = (w > 0) ? (x / w) : 0;
 			/* Calculate how much of the right side should be hidden (in pixels) */
 			var rightInset = Math.max(0, Math.min(w, w - x));
 			overlay.style.clipPath = 'inset(0 ' + rightInset + 'px 0 0)';

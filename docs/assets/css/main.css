@@ -1395,6 +1395,51 @@ body.chill-bg-focus #bg .bg-focus {
 	box-sizing: border-box;
 }
 
+/* Subtle pulsing white glow to draw attention to Chill controls */
+@keyframes chill-pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.0);
+		transform: scale(1);
+	}
+
+	50% {
+		box-shadow: 0 0 18px 8px rgba(255, 255, 255, 0.5);
+		/*rgba(196, 18, 128, 0.5)*/
+		transform: scale(1.02);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.0);
+		transform: scale(1);
+	}
+}
+
+/* Apply pulse to the Chill nav link (visible on page load) and the audio toggle when shown */
+#header nav ul li a[href="#chill"],
+#chill-audio-toggle {
+	-webkit-animation: chill-pulse 2.6s ease-in-out infinite;
+	animation: chill-pulse 2.6s ease-in-out infinite;
+}
+
+/* Stop pulsing when audio is playing to avoid distraction */
+#chill-audio-toggle.playing {
+	-webkit-animation: none;
+	animation: none;
+	box-shadow: none;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+	#header nav ul li a[href="#chill"],
+	#chill-audio-toggle {
+		-webkit-animation: none !important;
+		animation: none !important;
+		transform: none !important;
+		box-shadow: none !important;
+	}
+}
+
 /* Show toggle when in Chill (do NOT show during restore) */
 body.chill-bg-fadeout #chill-audio-toggle,
 body.chill-bg-focus #chill-audio-toggle {
