@@ -692,6 +692,105 @@ function initComparisons() {
 		}
 	})();
 
+	// Simple Chill audio visualizer: draws frequency bars into a canvas appended to #bg or .bg-focus
+	// (function setupChillVisualizer() {
+	// 	var audioEl = $chillAudioEl.length ? $chillAudioEl[0] : null;
+	// 	if (!audioEl) return;
+	// 	var AudioCtx = window.AudioContext || window.webkitAudioContext;
+	// 	var actx = null, src = null, analyser = null, dataArray = null, bufferLength = 0;
+	// 	var canvas = null, cctx = null, rafId = null;
+	// 	var barCount = 32; // number of bars to draw
+
+	// 	function ensureCanvas() {
+	// 		var bg = document.getElementById('bg');
+	// 		if (!bg) bg = document.body;
+	// 		if (!canvas) {
+	// 			canvas = document.createElement('canvas');
+	// 			canvas.className = 'chill-visualizer-canvas';
+	// 			canvas.style.position = 'absolute';
+	// 			canvas.style.left = '0';
+	// 			canvas.style.right = '0';
+	// 			canvas.style.bottom = '12px';
+	// 			canvas.style.height = '80px';
+	// 			canvas.style.pointerEvents = 'none';
+	// 			canvas.style.zIndex = 40;
+	// 			bg.appendChild(canvas);
+	// 			cctx = canvas.getContext('2d');
+	// 			resizeCanvas();
+	// 			window.addEventListener('resize', resizeCanvas);
+	// 		}
+	// 	}
+
+	// 	function resizeCanvas() {
+	// 		if (!canvas) return;
+	// 		var rect = canvas.getBoundingClientRect();
+	// 		canvas.width = Math.max(300, rect.width * (window.devicePixelRatio || 1));
+	// 		canvas.height = Math.max(64, rect.height * (window.devicePixelRatio || 1));
+	// 		if (cctx) cctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+	// 	}
+
+	// 	function connectAudio() {
+	// 		if (!AudioCtx) return;
+	// 		if (!actx) actx = new AudioCtx();
+	// 		try {
+	// 			if (!src) src = actx.createMediaElementSource(audioEl);
+	// 			if (!analyser) {
+	// 				analyser = actx.createAnalyser();
+	// 				analyser.fftSize = 2048;
+	// 				bufferLength = analyser.frequencyBinCount;
+	// 				dataArray = new Uint8Array(bufferLength);
+	// 				src.connect(analyser);
+	// 				analyser.connect(actx.destination);
+	// 			}
+	// 		} catch (e) { }
+	// 	}
+
+	// 	function draw() {
+	// 		if (!analyser || !cctx || !canvas) return;
+	// 		analyser.getByteFrequencyData(dataArray);
+	// 		var w = canvas.width / (window.devicePixelRatio || 1);
+	// 		var h = canvas.height / (window.devicePixelRatio || 1);
+	// 		cctx.clearRect(0, 0, w, h);
+	// 		var step = Math.floor(bufferLength / barCount);
+	// 		var barW = w / barCount;
+	// 		for (var i = 0; i < barCount; i++) {
+	// 			var sum = 0;
+	// 			for (var j = 0; j < step; j++) sum += dataArray[(i * step) + j] || 0;
+	// 			var avg = sum / step / 255;
+	// 			var barH = Math.max(2, avg * h);
+	// 			var x = i * barW;
+	// 			var grd = cctx.createLinearGradient(0, h - barH, 0, h);
+	// 			grd.addColorStop(0, 'rgba(100,180,255,0.9)');
+	// 			grd.addColorStop(1, 'rgba(40,90,180,0.9)');
+	// 			cctx.fillStyle = grd;
+	// 			cctx.fillRect(x + 1, h - barH, Math.max(2, barW - 2), barH);
+	// 		}
+	// 		rafId = requestAnimationFrame(draw);
+	// 	}
+
+	// 	function startVisualizer() {
+	// 		ensureCanvas();
+	// 		connectAudio();
+	// 		if (actx && actx.state === 'suspended') try { actx.resume(); } catch (e) { }
+	// 		if (!rafId) draw();
+	// 	}
+
+	// 	function stopVisualizer() {
+	// 		if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+	// 		if (cctx && canvas) { cctx.clearRect(0, 0, canvas.width, canvas.height); }
+	// 	}
+
+	// 	// Hook into audio play/pause events
+	// 	audioEl.addEventListener('play', function () { startVisualizer(); });
+	// 	audioEl.addEventListener('playing', function () { startVisualizer(); });
+	// 	audioEl.addEventListener('pause', function () { stopVisualizer(); });
+	// 	audioEl.addEventListener('ended', function () { stopVisualizer(); });
+
+	// 	// When Chill is exited we remove the canvas to avoid leftover visuals
+	// 	$('#chill-exit').on('click', function () { stopVisualizer(); if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas); canvas = null; });
+
+	// })();
+
 	$chillToggleBtn.on('click', function (e) {
 		e.preventDefault();
 		e.stopPropagation();
