@@ -1403,8 +1403,8 @@ body.chill-bg-focus #bg .bg-focus {
 	}
 
 	50% {
-		box-shadow: 0 0 18px 8px rgba(255, 255, 255, 0.5);
-		/*rgba(196, 18, 128, 0.5)*/
+		box-shadow: 0 0 18px 8px rgba(255, 255, 255, 0.15);
+		/*rgba(196, 18, 128, 0.15)*/
 		transform: scale(1.02);
 	}
 
