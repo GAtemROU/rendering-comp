@@ -971,11 +971,43 @@ function initComparisons() {
 		}
 	});
 
-	// Next-track button: skip to the next track in the chill queue and start playback
+	// Next-track button: manage enabled state and skip to the next track only when playing
 	var $chillNextBtn = $('#chill-next-track');
+
+	function updateChillNextState() {
+		var audio = ($chillAudioEl.length ? $chillAudioEl[0] : null);
+		if (!audio) {
+			$chillNextBtn.prop('disabled', true).addClass('disabled');
+			return;
+		}
+		// Enable only when audio is actively playing (not paused or ended)
+		if (!audio.paused && !audio.ended) {
+			$chillNextBtn.prop('disabled', false).removeClass('disabled');
+		} else {
+			$chillNextBtn.prop('disabled', true).addClass('disabled');
+		}
+	}
+
+	// Bind audio play/pause events to update next-button state
+	if ($chillAudioEl.length) {
+		try {
+			var _ca = $chillAudioEl[0];
+			_ca.addEventListener('play', updateChillNextState);
+			_ca.addEventListener('playing', updateChillNextState);
+			_ca.addEventListener('pause', updateChillNextState);
+			_ca.addEventListener('ended', updateChillNextState);
+			_ca.addEventListener('emptied', updateChillNextState);
+		} catch (e) { }
+	}
+
+	// Ensure initial state reflects whether audio is playing
+	updateChillNextState();
+
 	$chillNextBtn.on('click', function (e) {
 		e.preventDefault();
 		e.stopPropagation();
+		// Respect disabled state: do nothing if not enabled
+		if ($chillNextBtn.prop('disabled')) return;
 		if (!$chillAudioEl.length) return;
 		var audio = $chillAudioEl[0];
 		try {
@@ -988,6 +1020,8 @@ function initComparisons() {
 				$chillToggleBtn.addClass('playing');
 			}
 		} catch (err) { }
+		// Update button state since play() may be asynchronous
+		setTimeout(updateChillNextState, 100);
 	});
 
 	// Chill exit/close button: stop audio and return to main
