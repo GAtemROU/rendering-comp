@@ -65,6 +65,20 @@
 
 			<!-- Modeling -->
 			<article id="modeling">
+				<h2 class="major">Inspiration</h2>
+				<p>The inspiration for this scene comes from a combination of my personal interests and various artistic
+					influences.<br>
+					The Japanese Domestic car Market of the 90s has always fascinated me, especially the Toyota Supra
+					MKIV, which is an iconic car known for its performance and design.<br>
+					Furthermore the cyberpunk neon lights aesthetics have naturally appealed to me, as a perfect
+					showcase of reflective materials and vibrant colors in a dark environment, perfectly fitting for a
+					path traced render.<br>
+					Finally, the downtown urban setting with wet asphalt and foggy atmosphere is inspired by phonk
+					culture originally derived from 90s Memphis rap scene, which often features dark and moody
+					cityscapes in its visual representations.</p>
+				<p> Below are some of the inspiration images that influenced the creation of this scene.</p>
+				<span class="image main"><img src="images/modeling/nissan.jpg" alt="" /></span>
+				<span class="image main"><img src="images/modeling/supra.jpg" alt="" /></span>
 				<h2 class="major">Modeling</h2>
 				<span class="image main"><img src="images/modeling/blender_scene.png" alt="" /></span>
 				<p>The modeling of the scene has taken the same if not more time than the feature implementation part.
@@ -102,7 +116,7 @@
 					export to Lightwave. The most challenging part turned out to bake the normal map correctly.
 					Although, this part was tricky to figure out, the normals have tremendously improved the realism
 					of the asphalt, more on that in the feature section.</p>
-				<h3>Old Versions</h3>
+				<h2>Progression</h2>
 				<p>To further appreciate the efforts put into the modeling process, here are some old versions of the
 					scene demonstrating the evolution of the design.</p>
 				<span class="image main"><img src="images/old_renders/progress1.jpg" alt="" /></span>
@@ -215,8 +229,7 @@
 				<p>Even after 1024 samples per pixel, the image remains noisy, mainly due to the constant volume present
 					throughout the scene, although the high amount of lights also contribute to this problem. Hence, an
 					<a href="https://www.openimagedenoise.org/">Open Image Denoise</a> filter is applied to
-					remove the leftover noise. The hardest part was to correctly wire the pipeline to produce the
-					denoised image after rendering.<br>
+					remove the leftover noise.<br>
 					See the implementation in <code>src/postprocesses/denoise.cpp</code>
 				</p>
 				<div class="img-comp-container">
@@ -305,6 +318,11 @@
 				<p><a href="https://www.youtube.com/watch?v=VGPvxIrobFE&list=PLoGhuFDN7nEE-mz32Oy36fbebPWu1gEBi">car
 						modeling</a><br>
 					<a href="https://www.youtube.com/watch?v=5L74YpLyiFI">wet asphalt</a>
+				</p>
+				<h3>Inspiration Images</h3>
+				<p>
+					<a href="https://www.artstation.com/artwork/W2a13G">Nissan</a> - Ref 1<br>
+					<a href="https://wallpapercave.com/w/wp11403527">Supra</a> - Ref 2
 				</p>
 				<h3>Assets</h3>
 				<p><a href="https://www.blenderkit.com/asset-gallery-detail/e653d103-eab5-4666-9036-2c4bc8cc7464/">
