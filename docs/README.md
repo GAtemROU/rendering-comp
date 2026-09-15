@@ -3,7 +3,7 @@ This repository consists of all materials needed to describe the final scene for
 
 ## Final render
 ![Night Rider](/render.jpg)
-Achieved 6th place out of 36 submissions. Final standings will be available [here](https://graphics.cg.uni-saarland.de/courses/cg-2025/index.html).
+Achieved 6th place out of 36 submissions. Final standings will be available [here](https://graphics.cg.uni-saarland.de/competition/cg-2025/).
 
 ## Renderer
 The renderer has been developed as part of the computer graphics course at the University of Saarland. See [renderer] repository for more information.
