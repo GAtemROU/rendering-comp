@@ -811,6 +811,7 @@ input[type="radio"]+label:before {
 
 .image.fit img {
 	width: 100%;
+	height: auto;
 }
 
 .image.main {
@@ -821,6 +822,7 @@ input[type="radio"]+label:before {
 
 .image.main img {
 	width: 100%;
+	height: auto;
 }
 
 @media screen and (max-width: 736px) {
@@ -1290,7 +1292,7 @@ body.chill-bg-focus #bg:before {
 	-webkit-transition: -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out;
 	-ms-transition: -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out;
 	transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out;
-	background-image: url("../../images/bg.jpg");
+	background-image: url("../../images/bg.webp");
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -1361,7 +1363,7 @@ body.is-preload #bg:before {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url("../../render.jpg");
+	background-image: url("../../render.webp");
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

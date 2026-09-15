@@ -681,12 +681,26 @@ function initComparisons() {
 				audio._chillOrder = tracks.map(function (_, i) { return i; });
 				shuffleArray(audio._chillOrder);
 				audio._chillIndex = 0;
-				audio.src = _getTrackSrc(tracks[audio._chillOrder[audio._chillIndex]]);
+				// Do not set audio.src here — wait until user hits play
+			};
+
+			audio.ensureChillSrc = function () {
+				if (!audio._chillOrder || !audio._chillOrder.length) audio.resetChill();
+				var path = tracks[audio._chillOrder[audio._chillIndex]];
+				var next = _getTrackSrc(path);
+				// Avoid reloading same track
+				if (!audio.getAttribute('src') || audio.getAttribute('src') !== path) {
+					// For data-URI embeds path attribute won't match; still set next
+					audio.src = next;
+					if (next === path) audio.setAttribute('src', path);
+				}
 			};
 
 			audio.playNextChill = function () {
 				audio._chillIndex = (audio._chillIndex + 1) % audio._chillOrder.length;
-				audio.src = _getTrackSrc(tracks[audio._chillOrder[audio._chillIndex]]);
+				var path = tracks[audio._chillOrder[audio._chillIndex]];
+				audio.src = _getTrackSrc(path);
+				if (audio.src.indexOf('data:') !== 0) audio.setAttribute('src', path);
 				audio.play().catch(function () { });
 			};
 
@@ -695,7 +709,6 @@ function initComparisons() {
 				try { audio.playNextChill(); } catch (e) { }
 			});
 
-			// Initialize order once so the user can toggle play immediately
 			try { audio.resetChill(); } catch (e) { }
 		}
 	})();
@@ -963,6 +976,7 @@ function initComparisons() {
 		if (!$chillAudioEl.length) return;
 		var audio = $chillAudioEl[0];
 		if (audio.paused) {
+			try { if (audio.ensureChillSrc) audio.ensureChillSrc(); } catch (err) { }
 			fadeInAudio(audio, 600);
 			$chillToggleBtn.addClass('playing');
 		} else {
